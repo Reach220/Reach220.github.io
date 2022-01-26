@@ -1,0 +1,512 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="四种遍历算法       遍历算法几乎是二叉树所有算法的基础，而我们已经知道了二叉树的遍历方法有先序遍历、中序遍历、后序遍历，层序遍历；下面我们用代码实现一下四种遍历方法。先定义一下二叉树的结构体： 12345&#x2F;&#x2F;typedef struct BiNode&amp;#123;     TElemType data;    struct BiNode *lchild,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈二叉树算法">
+<meta property="og:url" content="https://king23.top/2021/11/22/%E6%B5%85%E8%B0%88%E4%BA%8C%E5%8F%89%E6%A0%91%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="Forever King">
+<meta property="og:description" content="四种遍历算法       遍历算法几乎是二叉树所有算法的基础，而我们已经知道了二叉树的遍历方法有先序遍历、中序遍历、后序遍历，层序遍历；下面我们用代码实现一下四种遍历方法。先定义一下二叉树的结构体： 12345&#x2F;&#x2F;typedef struct BiNode&amp;#123;     TElemType data;    struct BiNode *lchild,">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ee9ea2574e6743a1b243f48c5fa78b9e~tplv-k3u1fbpfcp-watermark.image">
+<meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ee9ea2574e6743a1b243f48c5fa78b9e~tplv-k3u1fbpfcp-watermark.image">
+<meta property="article:published_time" content="2021-11-22T13:08:50.000Z">
+<meta property="article:modified_time" content="2021-11-22T13:09:22.000Z">
+<meta property="article:author" content="不闻钟">
+<meta property="article:tag" content="Study">
+<meta property="article:tag" content="树">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ee9ea2574e6743a1b243f48c5fa78b9e~tplv-k3u1fbpfcp-watermark.image"><title>浅谈二叉树算法 | Forever King</title><link ref="canonical" href="https://king23.top/2021/11/22/%E6%B5%85%E8%B0%88%E4%BA%8C%E5%8F%89%E6%A0%91%E7%AE%97%E6%B3%95/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: true,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">Forever King</div><div class="header-banner-info__subtitle">Live a good life meet slowly.</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">浅谈二叉树算法</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-11-22</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-11-22</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="四种遍历算法"   >
+          <a href="#四种遍历算法" class="heading-link"><i class="fas fa-link"></i></a><a href="#四种遍历算法" class="headerlink" title="四种遍历算法"></a>四种遍历算法</h2>
+      <p>遍历算法几乎是二叉树所有算法的基础，而我们已经知道了二叉树的遍历方法有先序遍历、中序遍历、后序遍历，层序遍历；下面我们用代码实现一下四种遍历方法。<br>先定义一下二叉树的结构体：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line">typedef struct BiNode&#123; </span><br><span class="line">    TElemType data;</span><br><span class="line">    struct BiNode *lchild,*rchild; </span><br><span class="line">&#125;BiNode,*BiTree;</span><br></pre></td></tr></table></div></figure>
+<p>因为二叉树使用递归定义的，所以使用递归可以很轻易的写出遍历算法<br>先序遍历：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//先序遍历二叉树</span></span><br><span class="line"><span class="keyword">void</span> <span class="function"><span class="title">TraverseBiTree</span>(<span class="params">BiTree T</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (T == NULL)</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    visit(T);<span class="comment">//访问当前根节点</span></span><br><span class="line">    TraverseBiTree(T-&gt;lChild);<span class="comment">//递归遍历左子树</span></span><br><span class="line">    TraverseBiTree(T-&gt;rChlid);<span class="comment">//递归遍历右子树</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ee9ea2574e6743a1b243f48c5fa78b9e~tplv-k3u1fbpfcp-watermark.image" alt="2021-11-21 19-32-09 的屏幕截图.png"></p>
+<p>中序遍历也是可以写出的：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//中序遍历二叉树</span></span><br><span class="line"><span class="keyword">void</span> <span class="function"><span class="title">InOrderBiTree</span>(<span class="params">BiTree T</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (T == NULL)</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    InOrderBiTree(T-&gt;lChild);</span><br><span class="line">    visite(T);    </span><br><span class="line">    InOrderBiTree(T-&gt;rChlid);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>同样写出后序遍历算法：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//中序遍历二叉树</span></span><br><span class="line"><span class="keyword">void</span> <span class="function"><span class="title">InOrderBiTree</span>(<span class="params">BiTree T</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (T == NULL)</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    InOrderBiTree(T-&gt;lChild);</span><br><span class="line">    InOrderBiTree(T-&gt;rChlid);</span><br><span class="line">    visite(T);    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>三种遍历算法非常相似，只有访问根节点的代码位置不同，而遍历算法的时间复杂度是O(n)[每个结点只访问一次],空间复杂度也是O(n)[栈占用的最大辅助空间]  </p>
+<p>除了以上三种算法外，还有一种层次遍历法，顾名思义，就是二叉树从根节点开始按从上到下，从左到右的顺序访问每个结点，每个结点只被访问一次。<br>使用队列来完成这个算法：</p>
+<ul>
+<li>将根节点入队</li>
+<li>对不空时循环：从队列中出列一个结点p，访问它；  <ol>
+<li>若它有左孩子结点，将左孩子入队</li>
+<li>若它有左孩子结点，将左孩子入队<br>先定义一下使用的队列：</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">typedef struct&#123;</span><br><span class="line">    BTnode data[MaxSize];<span class="comment">//存放队中元素</span></span><br><span class="line">    int front,rear;<span class="comment">//队头指针，队尾指针</span></span><br><span class="line">    &#125;SqQueue</span><br></pre></td></tr></table></div></figure>
+<p>再来实现层序遍历：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="function"><span class="title">levelOrder</span>(<span class="params">TreeNode *T</span>)</span>&#123;</span><br><span class="line">        BTNode *p;</span><br><span class="line">        SqQueue *qu;</span><br><span class="line">        QueueInit(qu);<span class="comment">//初始化队列</span></span><br><span class="line">        Queueadd(qu,T);<span class="comment">//根节点入队</span></span><br><span class="line">        <span class="keyword">while</span>(!QueueEmpty(qu))&#123;<span class="comment">//队不为空，循环</span></span><br><span class="line">            QueueDelet(qu,p)<span class="comment">//出队结点p，p指向当前出队的结点</span></span><br><span class="line">            visi(p);<span class="comment">//访问结点p</span></span><br><span class="line">            <span class="keyword">if</span>(p-&gt;lchild != NULL) Queueadd(qu,p-&gt;lchild);<span class="comment">//根节点入队</span></span><br><span class="line">            <span class="keyword">if</span>(p-&gt;rchild != NULL) Queueadd(qu,p-&gt;lchild);<span class="comment">//根节点入队</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="二叉树的建立"   >
+          <a href="#二叉树的建立" class="heading-link"><i class="fas fa-link"></i></a><a href="#二叉树的建立" class="headerlink" title="二叉树的建立"></a>二叉树的建立</h2>
+      <p>在已知某种遍历顺序时候，我们可以通过遍历顺序创建二叉树；<br>首先是先序创建，获得了二叉树的结点信息，建立了二叉树的存储结构，在建立二叉树的过程中按照先序方式建立（只知道先序序列是不够的，还要知道空结点的位置才能得到唯一的二叉树，这里用’#’代表空结点）:</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//先序创建二叉树</span></span><br><span class="line">bool <span class="function"><span class="title">DLRCreatBiTree</span>(<span class="params">BiTree &amp;T</span>)</span>&#123;</span><br><span class="line">    cin &gt;&gt; ch;</span><br><span class="line">    <span class="keyword">if</span>(ch == <span class="string">&quot;#&quot;</span>) T = NULL;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!T = (BiTNode*)malloc(sizeof(BiTNode)));<span class="comment">//T = new BiNode;</span></span><br><span class="line">            exit(-<span class="number">1</span>);</span><br><span class="line">        T-&gt;data = ch;<span class="comment">//申请空间储存数据——&gt;生成根节点</span></span><br><span class="line">        DLRCreatBiTree(T-&gt;lchild);<span class="comment">//构建左子树</span></span><br><span class="line">        DLRCreatBiTree(T-&gt;rchild);<span class="comment">//构建右子树</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p> 中序创建二叉树和后序创建爱你二叉树与先序创建也一般无二；<br> 中序创建：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//中序创建二叉树</span></span><br><span class="line">bool <span class="function"><span class="title">LDRCreatBiTree</span>(<span class="params">BiTree &amp;T</span>)</span>&#123;</span><br><span class="line">    cin &gt;&gt; ch;</span><br><span class="line">    <span class="keyword">if</span>(ch == <span class="string">&quot;#&quot;</span>) T = NULL;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        LDRCreatBiTree(T-&gt;lchild);<span class="comment">//构建左子树</span></span><br><span class="line">        <span class="keyword">if</span>(!T = (BiTNode*)malloc(sizeof(BiTNode)));<span class="comment">//T = new BiNode;</span></span><br><span class="line">            exit(-<span class="number">1</span>);</span><br><span class="line">        T-&gt;data = ch;<span class="comment">//申请空间储存数据——&gt;生成根节点</span></span><br><span class="line">        LDRCreatBiTree(T-&gt;rchild);<span class="comment">//构建右子树</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>后序创建：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">bool <span class="function"><span class="title">LRDCreatBiTree</span>(<span class="params">BiTree &amp;T</span>)</span>&#123;</span><br><span class="line">    cin &gt;&gt; ch;</span><br><span class="line">    <span class="keyword">if</span>(ch == <span class="string">&quot;#&quot;</span>) T = NULL;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        LRDCreatBiTree(T-&gt;lchild);<span class="comment">//构建左子树</span></span><br><span class="line">        LRDCreatBiTree(T-&gt;rchild);<span class="comment">//构建右子树</span></span><br><span class="line">        <span class="keyword">if</span>(!T = (BiTNode*)malloc(sizeof(BiTNode)));<span class="comment">//T = new BiNode;</span></span><br><span class="line">            exit(-<span class="number">1</span>);</span><br><span class="line">        T-&gt;data = ch;<span class="comment">//申请空间储存数据——&gt;生成根节点</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="复制二叉树"   >
+          <a href="#复制二叉树" class="heading-link"><i class="fas fa-link"></i></a><a href="#复制二叉树" class="headerlink" title="复制二叉树"></a>复制二叉树</h2>
+      <p>复制算法也是使用递归来完成：</p>
+<ul>
+<li>如果是空树，递归结束</li>
+<li>否则申请新的结点空间，复制结点<ol>
+<li>递归复制左子树 </li>
+<li>递归复制右子树</li>
+</ol>
+</li>
+</ul>
+<p>当然是可以用多种遍历循序来完成复制的：<br>先序复制：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">DLRCopy</span>(<span class="params">BiTree T,BiTree &amp;newT</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(T == NULL)&#123;</span><br><span class="line">        newT = NULL;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        newT = (BiTNode*)malloc(sizeof(BiTNode));<span class="comment">//newT = new BiTNode;</span></span><br><span class="line">        newT-&gt;data = T-&gt;data;</span><br><span class="line">        DLRcopy(T-&gt;lchild,newT-&gt;lchild);</span><br><span class="line">        DLRcopy(T-&gt;rchild,newT-&gt;rchild);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>中序复制：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">LDRCopy</span>(<span class="params">BiTree T,BiTree &amp;newT</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(T == NULL)&#123;</span><br><span class="line">        newT = NULL;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        LDRcopy(T-&gt;lchild,newT-&gt;lchild);</span><br><span class="line">        newT = (BiTNode*)malloc(sizeof(BiTNode));<span class="comment">//newT = new BiTNode;</span></span><br><span class="line">        newT-&gt;data = T-&gt;data;</span><br><span class="line">        LDRcopy(T-&gt;rchild,newT-&gt;rchild);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>后序复制：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">LRDCopy</span>(<span class="params">BiTree T,BiTree &amp;newT</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(T == NULL)&#123;</span><br><span class="line">        newT = NULL;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        LRDcopy(T-&gt;lchild,newT-&gt;lchild);</span><br><span class="line">        LRDcopy(T-&gt;rchild,newT-&gt;rchild);</span><br><span class="line">        newT = (BiTNode*)malloc(sizeof(BiTNode));<span class="comment">//newT = new BiTNode;</span></span><br><span class="line">        newT-&gt;data = T-&gt;data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="求二叉树的深度"   >
+          <a href="#求二叉树的深度" class="heading-link"><i class="fas fa-link"></i></a><a href="#求二叉树的深度" class="headerlink" title="求二叉树的深度"></a>求二叉树的深度</h2>
+      <p>求取二叉树的深度：</p>
+<ul>
+<li>如果是空树，则深度为0</li>
+<li>否则，递归计算左子树的深度为m,递归计算右子树的深度为n,二叉树的深度为m与n的较大者加1</li>
+</ul>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">Depth</span>(<span class="params">BiTree T</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>*T == NULL) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        int m = Depth(T-&gt;lchild);</span><br><span class="line">        int n = Depth(T-&gt;rchild);</span><br><span class="line">        <span class="keyword">if</span>(m &gt; n) <span class="keyword">return</span>(m + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">else</span> retrun (n + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="计算二叉树结点总数"   >
+          <a href="#计算二叉树结点总数" class="heading-link"><i class="fas fa-link"></i></a><a href="#计算二叉树结点总数" class="headerlink" title="计算二叉树结点总数"></a>计算二叉树结点总数</h2>
+      <ul>
+<li>如果是空树，则结点数为0</li>
+<li>否则，结点个数为## 四种遍历算法<br>遍历算法几乎是二叉树所有算法的基础，而我们已经知道了二叉树的遍历方法有先序遍历、中序遍历、后序遍历，层序遍历；下面我们用代码实现一下四种遍历方法。<br>先定义一下二叉树的结构体：</li>
+</ul>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line">typedef struct BiNode&#123; </span><br><span class="line">    TElemType data;</span><br><span class="line">    struct BiNode *lchild,*rchild; </span><br><span class="line">&#125;BiNode,*BiTree;</span><br></pre></td></tr></table></div></figure>
+<p>因为二叉树使用递归定义的，所以使用递归可以很轻易的写出遍历算法<br>先序遍历：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//先序遍历二叉树</span></span><br><span class="line"><span class="keyword">void</span> <span class="function"><span class="title">TraverseBiTree</span>(<span class="params">BiTree T</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (T == NULL)</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    visit(T);<span class="comment">//访问当前根节点</span></span><br><span class="line">    TraverseBiTree(T-&gt;lChild);<span class="comment">//递归遍历左子树</span></span><br><span class="line">    TraverseBiTree(T-&gt;rChlid);<span class="comment">//递归遍历右子树</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ee9ea2574e6743a1b243f48c5fa78b9e~tplv-k3u1fbpfcp-watermark.image" alt="2021-11-21 19-32-09 的屏幕截图.png"></p>
+<p>中序遍历也是可以写出的：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//中序遍历二叉树</span></span><br><span class="line"><span class="keyword">void</span> <span class="function"><span class="title">InOrderBiTree</span>(<span class="params">BiTree T</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (T == NULL)</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    InOrderBiTree(T-&gt;lChild);</span><br><span class="line">    visite(T);    </span><br><span class="line">    InOrderBiTree(T-&gt;rChlid);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>同样写出后序遍历算法：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//中序遍历二叉树</span></span><br><span class="line"><span class="keyword">void</span> <span class="function"><span class="title">InOrderBiTree</span>(<span class="params">BiTree T</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (T == NULL)</span><br><span class="line">        <span class="keyword">return</span> ;</span><br><span class="line">    InOrderBiTree(T-&gt;lChild);</span><br><span class="line">    InOrderBiTree(T-&gt;rChlid);</span><br><span class="line">    visite(T);    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>三种遍历算法非常相似，只有访问根节点的代码位置不同，而遍历算法的时间复杂度是O(n)[每个结点只访问一次],空间复杂度也是O(n)[栈占用的最大辅助空间]  </p>
+<p>除了以上三种算法外，还有一种层次遍历法，顾名思义，就是二叉树从根节点开始按从上到下，从左到右的顺序访问每个结点，每个结点只被访问一次。<br>使用队列来完成这个算法：</p>
+<ul>
+<li>将根节点入队</li>
+<li>对不空时循环：从队列中出列一个结点p，访问它；  <ol>
+<li>若它有左孩子结点，将左孩子入队</li>
+<li>若它有左孩子结点，将左孩子入队<br>先定义一下使用的队列：</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">typedef struct&#123;</span><br><span class="line">    BTnode data[MaxSize];<span class="comment">//存放队中元素</span></span><br><span class="line">    int front,rear;<span class="comment">//队头指针，队尾指针</span></span><br><span class="line">    &#125;SqQueue</span><br></pre></td></tr></table></div></figure>
+<p>再来实现层序遍历：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="function"><span class="title">levelOrder</span>(<span class="params">TreeNode *T</span>)</span>&#123;</span><br><span class="line">        BTNode *p;</span><br><span class="line">        SqQueue *qu;</span><br><span class="line">        QueueInit(qu);<span class="comment">//初始化队列</span></span><br><span class="line">        Queueadd(qu,T);<span class="comment">//根节点入队</span></span><br><span class="line">        <span class="keyword">while</span>(!QueueEmpty(qu))&#123;<span class="comment">//队不为空，循环</span></span><br><span class="line">            QueueDelet(qu,p)<span class="comment">//出队结点p，p指向当前出队的结点</span></span><br><span class="line">            visi(p);<span class="comment">//访问结点p</span></span><br><span class="line">            <span class="keyword">if</span>(p-&gt;lchild != NULL) Queueadd(qu,p-&gt;lchild);<span class="comment">//根节点入队</span></span><br><span class="line">            <span class="keyword">if</span>(p-&gt;rchild != NULL) Queueadd(qu,p-&gt;lchild);<span class="comment">//根节点入队</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="二叉树的建立-1"   >
+          <a href="#二叉树的建立-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#二叉树的建立-1" class="headerlink" title="二叉树的建立"></a>二叉树的建立</h2>
+      <p>在已知某种遍历顺序时候，我们可以通过遍历顺序创建二叉树；<br>首先是先序创建，获得了二叉树的结点信息，建立了二叉树的存储结构，在建立二叉树的过程中按照先序方式建立（只知道先序序列是不够的，还要知道空结点的位置才能得到唯一的二叉树，这里用’#’代表空结点）:</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//先序创建二叉树</span></span><br><span class="line">bool <span class="function"><span class="title">DLRCreatBiTree</span>(<span class="params">BiTree &amp;T</span>)</span>&#123;</span><br><span class="line">    cin &gt;&gt; ch;</span><br><span class="line">    <span class="keyword">if</span>(ch == <span class="string">&quot;#&quot;</span>) T = NULL;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!T = (BiTNode*)malloc(sizeof(BiTNode)));<span class="comment">//T = new BiNode;</span></span><br><span class="line">            exit(-<span class="number">1</span>);</span><br><span class="line">        T-&gt;data = ch;<span class="comment">//申请空间储存数据——&gt;生成根节点</span></span><br><span class="line">        DLRCreatBiTree(T-&gt;lchild);<span class="comment">//构建左子树</span></span><br><span class="line">        DLRCreatBiTree(T-&gt;rchild);<span class="comment">//构建右子树</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p> 中序创建二叉树和后序创建爱你二叉树与先序创建也一般无二；<br> 中序创建：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//中序创建二叉树</span></span><br><span class="line">bool <span class="function"><span class="title">LDRCreatBiTree</span>(<span class="params">BiTree &amp;T</span>)</span>&#123;</span><br><span class="line">    cin &gt;&gt; ch;</span><br><span class="line">    <span class="keyword">if</span>(ch == <span class="string">&quot;#&quot;</span>) T = NULL;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        LDRCreatBiTree(T-&gt;lchild);<span class="comment">//构建左子树</span></span><br><span class="line">        <span class="keyword">if</span>(!T = (BiTNode*)malloc(sizeof(BiTNode)));<span class="comment">//T = new BiNode;</span></span><br><span class="line">            exit(-<span class="number">1</span>);</span><br><span class="line">        T-&gt;data = ch;<span class="comment">//申请空间储存数据——&gt;生成根节点</span></span><br><span class="line">        LDRCreatBiTree(T-&gt;rchild);<span class="comment">//构建右子树</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>后序创建：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">bool <span class="function"><span class="title">LRDCreatBiTree</span>(<span class="params">BiTree &amp;T</span>)</span>&#123;</span><br><span class="line">    cin &gt;&gt; ch;</span><br><span class="line">    <span class="keyword">if</span>(ch == <span class="string">&quot;#&quot;</span>) T = NULL;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        LRDCreatBiTree(T-&gt;lchild);<span class="comment">//构建左子树</span></span><br><span class="line">        LRDCreatBiTree(T-&gt;rchild);<span class="comment">//构建右子树</span></span><br><span class="line">        <span class="keyword">if</span>(!T = (BiTNode*)malloc(sizeof(BiTNode)));<span class="comment">//T = new BiNode;</span></span><br><span class="line">            exit(-<span class="number">1</span>);</span><br><span class="line">        T-&gt;data = ch;<span class="comment">//申请空间储存数据——&gt;生成根节点</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="复制二叉树-1"   >
+          <a href="#复制二叉树-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#复制二叉树-1" class="headerlink" title="复制二叉树"></a>复制二叉树</h2>
+      <p>复制算法也是使用递归来完成：</p>
+<ul>
+<li>如果是空树，递归结束</li>
+<li>否则申请新的结点空间，复制结点<ol>
+<li>递归复制左子树 </li>
+<li>递归复制右子树</li>
+</ol>
+</li>
+</ul>
+<p>当然是可以用多种遍历循序来完成复制的：<br>先序复制：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">DLRCopy</span>(<span class="params">BiTree T,BiTree &amp;newT</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(T == NULL)&#123;</span><br><span class="line">        newT = NULL;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        newT = (BiTNode*)malloc(sizeof(BiTNode));<span class="comment">//newT = new BiTNode;</span></span><br><span class="line">        newT-&gt;data = T-&gt;data;</span><br><span class="line">        DLRcopy(T-&gt;lchild,newT-&gt;lchild);</span><br><span class="line">        DLRcopy(T-&gt;rchild,newT-&gt;rchild);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>中序复制：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">LDRCopy</span>(<span class="params">BiTree T,BiTree &amp;newT</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(T == NULL)&#123;</span><br><span class="line">        newT = NULL;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        LDRcopy(T-&gt;lchild,newT-&gt;lchild);</span><br><span class="line">        newT = (BiTNode*)malloc(sizeof(BiTNode));<span class="comment">//newT = new BiTNode;</span></span><br><span class="line">        newT-&gt;data = T-&gt;data;</span><br><span class="line">        LDRcopy(T-&gt;rchild,newT-&gt;rchild);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>后序复制：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">LRDCopy</span>(<span class="params">BiTree T,BiTree &amp;newT</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(T == NULL)&#123;</span><br><span class="line">        newT = NULL;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        LRDcopy(T-&gt;lchild,newT-&gt;lchild);</span><br><span class="line">        LRDcopy(T-&gt;rchild,newT-&gt;rchild);</span><br><span class="line">        newT = (BiTNode*)malloc(sizeof(BiTNode));<span class="comment">//newT = new BiTNode;</span></span><br><span class="line">        newT-&gt;data = T-&gt;data;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+
+        <h2 id="求二叉树的深度-1"   >
+          <a href="#求二叉树的深度-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#求二叉树的深度-1" class="headerlink" title="求二叉树的深度"></a>求二叉树的深度</h2>
+      <p>求取二叉树的深度：</p>
+<ul>
+<li>如果是空树，则深度为0</li>
+<li>否则，递归计算左子树的深度为m,递归计算右子树的深度为n,二叉树的深度为m与n的较大者加1</li>
+</ul>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">Depth</span>(<span class="params">BiTree T</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>*T == NULL) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        int m = Depth(T-&gt;lchild);</span><br><span class="line">        int n = Depth(T-&gt;rchild);</span><br><span class="line">        <span class="keyword">if</span>(m &gt; n) <span class="keyword">return</span>(m + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">else</span> retrun (n + <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="计算二叉树结点总数-1"   >
+          <a href="#计算二叉树结点总数-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#计算二叉树结点总数-1" class="headerlink" title="计算二叉树结点总数"></a>计算二叉树结点总数</h2>
+      <ul>
+<li>如果是空树，则结点数为0</li>
+<li>否则，结点个数为左子树的结点个数+右子树的结点数+1</li>
+</ul>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">NodeCount</span>(<span class="params">BiTree T</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(T == NULL) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> NodeCount(T-&gt;lchild) +NodeCount(T-&gt;rchild) + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="计算叶子结点的个数"   >
+          <a href="#计算叶子结点的个数" class="heading-link"><i class="fas fa-link"></i></a><a href="#计算叶子结点的个数" class="headerlink" title="计算叶子结点的个数"></a>计算叶子结点的个数</h2>
+      <ul>
+<li>如果是空树，则结点数为0</li>
+<li>否则，结点个数为左子树的结点个数+右结点+右子树的结点数<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">LeadCount</span>(<span class="params">BiTree T</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(T == NULL) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(T-&gt;lchild == NULL &amp;&amp; T-&gt;rchild == NULL) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> NodeCount(T-&gt;lchild) +NodeCount(T-&gt;rchild) +;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="线索二叉树-Threaded-Binary-Tree"   >
+          <a href="#线索二叉树-Threaded-Binary-Tree" class="heading-link"><i class="fas fa-link"></i></a><a href="#线索二叉树-Threaded-Binary-Tree" class="headerlink" title="线索二叉树(Threaded Binary Tree)"></a>线索二叉树(Threaded Binary Tree)</h2>
+      当使用二叉链表作为二叉树的存储结构时，可以很方便地找到某个结点的左右孩子：但是一般情况下，无法直接找到该节点在某种遍历序列中的前驱和后继结点；<br>有三种解决方法：</li>
+<li>通过遍历寻找——浪费时间</li>
+<li>再增设前驱，后继指针域——浪费空间</li>
+<li>利用二叉链表的空指针域<br>线索华——利用二叉链表的空指针域：<br>如果某个结点的左孩子为空，则将空的左孩子的指针域改为指向其前驱；如果某个结点的右孩子为空，则将空的右孩子的指针域改为指向其后继；[这种改变指向的指针称为“”线索“”]</li>
+</ul>
+<blockquote>
+<p>为了区分lchildhe==和rchild，对二叉链表中每个结点增设两个标志域ltag,rtag;并约定：</p>
+<ul>
+<li>ltage = 0 lchild 指向该结点的左孩子</li>
+<li>ltage = 1 lchild 指向该结点的前驱</li>
+<li>rtage = 0 rchild 指向该结点的右孩子</li>
+<li>rtage = 1 rchild 指向该结点的后继<br>增设一个头结点：ltag = 0,lchild之下部分根节点；rtag = 1rchild指向遍历序列中的最后一个结点（遍历序列中的第一个结点lc域和最后一个结点的rc域都指向头结点）</li>
+</ul>
+</blockquote>
+<p>定义存储结构：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">typedef steuct BiTHrNode&#123;</span><br><span class="line">    int data;</span><br><span class="line">    bool ltag,rtag;</span><br><span class="line">   steuct BiTHrNode *lchild,*rchild;</span><br><span class="line">&#125;BiThrNode,*BiThrTree;</span><br><span class="line"><span class="string">``</span><span class="string">`iTree T)&#123;</span></span><br><span class="line"><span class="string">    if(T == NULL) return 0;</span></span><br><span class="line"><span class="string">    else&#123;</span></span><br><span class="line"><span class="string">        return NodeCount(T-&gt;lchild) +NodeCount(T-&gt;rchild) + 1;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="计算叶子结点的个数-1"   >
+          <a href="#计算叶子结点的个数-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#计算叶子结点的个数-1" class="headerlink" title="计算叶子结点的个数"></a>计算叶子结点的个数</h2>
+      <ul>
+<li>如果是空树，则结点数为0</li>
+<li>否则，结点个数为左子树的结点个数+右结点+右子树的结点数<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">int <span class="function"><span class="title">LeadCount</span>(<span class="params">BiTree T</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(T == NULL) <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(T-&gt;lchild == NULL &amp;&amp; T-&gt;rchild == NULL) <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> NodeCount(T-&gt;lchild) +NodeCount(T-&gt;rchild) +;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="线索二叉树-Threaded-Binary-Tree-1"   >
+          <a href="#线索二叉树-Threaded-Binary-Tree-1" class="heading-link"><i class="fas fa-link"></i></a><a href="#线索二叉树-Threaded-Binary-Tree-1" class="headerlink" title="线索二叉树(Threaded Binary Tree)"></a>线索二叉树(Threaded Binary Tree)</h2>
+      当使用二叉链表作为二叉树的存储结构时，可以很方便地找到某个结点的左右孩子：但是一般情况下，无法直接找到该节点在某种遍历序列中的前驱和后继结点；<br>有三种解决方法：</li>
+<li>通过遍历寻找——浪费时间</li>
+<li>再增设前驱，后继指针域——浪费空间</li>
+<li>利用二叉链表的空指针域<br>线索华——利用二叉链表的空指针域：<br>如果某个结点的左孩子为空，则将空的左孩子的指针域改为指向其前驱；如果某个结点的右孩子为空，则将空的右孩子的指针域改为指向其后继；[这种改变指向的指针称为“”线索“”]</li>
+</ul>
+<blockquote>
+<p>为了区分lchildhe==和rchild，对二叉链表中每个结点增设两个标志域ltag,rtag;并约定：</p>
+<ul>
+<li>ltage = 0 lchild 指向该结点的左孩子</li>
+<li>ltage = 1 lchild 指向该结点的前驱</li>
+<li>rtage = 0 rchild 指向该结点的右孩子</li>
+<li>rtage = 1 rchild 指向该结点的后继<br>增设一个头结点：ltag = 0,lchild之下部分根节点；rtag = 1rchild指向遍历序列中的最后一个结点（遍历序列中的第一个结点lc域和最后一个结点的rc域都指向头结点）</li>
+</ul>
+</blockquote>
+<p>定义存储结构：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">typedef steuct BiTHrNode&#123;</span><br><span class="line">    int data;</span><br><span class="line">    bool ltag,rtag;</span><br><span class="line">   steuct BiTHrNode *lchild,*rchild;</span><br><span class="line">&#125;BiThrNode,*BiThrTree;</span><br></pre></td></tr></table></div></figure></div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://king23.top">不闻钟</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://king23.top/2021/11/22/%E6%B5%85%E8%B0%88%E4%BA%8C%E5%8F%89%E6%A0%91%E7%AE%97%E6%B3%95/">https://king23.top/2021/11/22/%E6%B5%85%E8%B0%88%E4%BA%8C%E5%8F%89%E6%A0%91%E7%AE%97%E6%B3%95/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://king23.top/tags/Study/">Study</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://king23.top/tags/%E6%A0%91/">树</a></span></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img" src="https://ftp.bmp.ovh/imgs/2021/05/c94b7c01d6e33986.jpg"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img" src="https://ftp.bmp.ovh/imgs/2021/05/cded0174eeb6c085.jpg"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/11/23/%E6%A0%91%E5%B8%B8%E7%94%A8%E7%9A%84%E4%B8%89%E7%A7%8D%E5%82%A8%E5%AD%98%E7%BB%93%E6%9E%84/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">树常用的三种储存结构</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/11/21/%E5%89%91%E6%8C%87offer24-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/"><span class="paginator-prev__text">剑指offer24 反转链表</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E7%A7%8D%E9%81%8D%E5%8E%86%E7%AE%97%E6%B3%95"><span class="toc-number">1.</span> <span class="toc-text">
+          四种遍历算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%BB%BA%E7%AB%8B"><span class="toc-number">2.</span> <span class="toc-text">
+          二叉树的建立</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">3.</span> <span class="toc-text">
+          复制二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%B7%B1%E5%BA%A6"><span class="toc-number">4.</span> <span class="toc-text">
+          求二叉树的深度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BB%93%E7%82%B9%E6%80%BB%E6%95%B0"><span class="toc-number">5.</span> <span class="toc-text">
+          计算二叉树结点总数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%BB%BA%E7%AB%8B-1"><span class="toc-number">6.</span> <span class="toc-text">
+          二叉树的建立</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E4%BA%8C%E5%8F%89%E6%A0%91-1"><span class="toc-number">7.</span> <span class="toc-text">
+          复制二叉树</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B1%82%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%B7%B1%E5%BA%A6-1"><span class="toc-number">8.</span> <span class="toc-text">
+          求二叉树的深度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E4%BA%8C%E5%8F%89%E6%A0%91%E7%BB%93%E7%82%B9%E6%80%BB%E6%95%B0-1"><span class="toc-number">9.</span> <span class="toc-text">
+          计算二叉树结点总数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9%E7%9A%84%E4%B8%AA%E6%95%B0"><span class="toc-number">10.</span> <span class="toc-text">
+          计算叶子结点的个数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%B4%A2%E4%BA%8C%E5%8F%89%E6%A0%91-Threaded-Binary-Tree"><span class="toc-number">11.</span> <span class="toc-text">
+          线索二叉树(Threaded Binary Tree)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%A1%E7%AE%97%E5%8F%B6%E5%AD%90%E7%BB%93%E7%82%B9%E7%9A%84%E4%B8%AA%E6%95%B0-1"><span class="toc-number">12.</span> <span class="toc-text">
+          计算叶子结点的个数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%B4%A2%E4%BA%8C%E5%8F%89%E6%A0%91-Threaded-Binary-Tree-1"><span class="toc-number">13.</span> <span class="toc-text">
+          线索二叉树(Threaded Binary Tree)</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="https://ftp.bmp.ovh/imgs/2021/04/97568392c68eaf01.png" alt="avatar"></div><p class="sidebar-ov-author__text">固执己见 一意孤行</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://www.zhihu.com/" target="_blank" rel="noopener" data-popover="知乎" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">知</span></a><a class="sidebar-ov-social-item" href="tencent://message?nin=2530281837" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="https://juejin.cn/" target="_blank" rel="noopener" data-popover="social.juejin" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">掘</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">65</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">13</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">12</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>不闻钟</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="树与二叉树的概念                           树       树的定义:树(Tree)是n（n &gt;&#x3D; 0)个结点的有限集。  若n &#x3D; 0 ，则称为空树  若 n &gt; 0,则它满足如下条件   1.有且仅有一个特定的称为根(Root)的结点   其余结点可分为m(m &gt;&#x3D; 0)个互不相交的优先级T1，T2，T3……T">
+<meta property="og:type" content="article">
+<meta property="og:title" content="树和二叉树的基础知识">
+<meta property="og:url" content="https://king23.top/2021/11/18/%E6%A0%91%E5%92%8C%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%B8%80/index.html">
+<meta property="og:site_name" content="Forever King">
+<meta property="og:description" content="树与二叉树的概念                           树       树的定义:树(Tree)是n（n &gt;&#x3D; 0)个结点的有限集。  若n &#x3D; 0 ，则称为空树  若 n &gt; 0,则它满足如下条件   1.有且仅有一个特定的称为根(Root)的结点   其余结点可分为m(m &gt;&#x3D; 0)个互不相交的优先级T1，T2，T3……T">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8b49761801254346beba360b74791fe8~tplv-k3u1fbpfcp-watermark.image">
+<meta property="og:image" content="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e1d513b12a4d425183f920b5a9b8340a~tplv-k3u1fbpfcp-watermark.image">
+<meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/815763407cce4a16b12893b2969f2ef2~tplv-k3u1fbpfcp-watermark.image">
+<meta property="og:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/956b46f31196400aa12ecf6e3082baa7~tplv-k3u1fbpfcp-watermark.image">
+<meta property="article:published_time" content="2021-11-18T14:14:11.000Z">
+<meta property="article:modified_time" content="2021-11-20T14:37:40.000Z">
+<meta property="article:author" content="不闻钟">
+<meta property="article:tag" content="Study">
+<meta property="article:tag" content="树">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8b49761801254346beba360b74791fe8~tplv-k3u1fbpfcp-watermark.image"><title>树和二叉树的基础知识 | Forever King</title><link ref="canonical" href="https://king23.top/2021/11/18/%E6%A0%91%E5%92%8C%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%B8%80/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: true,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">Forever King</div><div class="header-banner-info__subtitle">Live a good life meet slowly.</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">树和二叉树的基础知识</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-11-18</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-11-20</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="树与二叉树的概念"   >
+          <a href="#树与二叉树的概念" class="heading-link"><i class="fas fa-link"></i></a><a href="#树与二叉树的概念" class="headerlink" title="树与二叉树的概念"></a>树与二叉树的概念</h2>
+      
+        <h3 id="树"   >
+          <a href="#树" class="heading-link"><i class="fas fa-link"></i></a><a href="#树" class="headerlink" title="树"></a>树</h3>
+      <p>树的定义:树(Tree)是n（n &gt;= 0)个结点的有限集。</p>
+<ul>
+<li><p>若n = 0 ，则称为空树</p>
+</li>
+<li><p>若 n &gt; 0,则它满足如下条件</p>
+<p>  1.有且仅有一个特定的称为根(Root)的结点 </p>
+<ol>
+<li>其余结点可分为m(m &gt;= 0)个互不相交的优先级T1，T2，T3……Tm,其中每一个集合本身又是一棵树，并称为根的子树(SubTree)</li>
+</ol>
+</li>
+</ul>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8b49761801254346beba360b74791fe8~tplv-k3u1fbpfcp-watermark.image" alt="2021-11-16 21-22-07 的屏幕截图.png"></p>
+<p>所以树的义实际是一个递归的定义。</p>
+<blockquote>
+<p>我们需要知道一些树的基础术语：<br>树的深度：树中结点的最大层次<br>结点的度：结点拥有的子树数    树的度：树内各节点的度的最大值 [度为0的终端结点被称作<em>叶子结点</em>，而其余结点除根节点外被称作<em>内部结点</em>]<br>结点的子树的根称为该结点的孩子，该结点称为孩子的双亲<br>兄弟结点：有共同的双亲    堂兄弟结点：双亲在同一层的结点<br>结点的祖先：从根到该节点所经分支上的所有结点    结点的子孙：从某结点为根的子树中的任一结点<br>森林：是m(m &gt;= 0)棵互不相交的树的集合[一棵树可以看做一个特殊的森林]</p>
+</blockquote>
+
+        <h3 id="二叉树"   >
+          <a href="#二叉树" class="heading-link"><i class="fas fa-link"></i></a><a href="#二叉树" class="headerlink" title="二叉树"></a>二叉树</h3>
+      <p>二叉树是结构最简单，规律性最强的树，而且所有树都能装为唯一对应的二叉树。所以二叉树在树结构的应用中起着非常重要的作用，因为对二叉树的许多算法比较简单，二任何数都可以与二叉树互相转化，这样就解决了树的存储结构机器运算中存在的复杂性。</p>
+<p>二叉树的定义：二叉树是n(n &gt;= 0)个结点的有限集，它或者是空集，或者是由一个根结点及两棵互不相交的分别称作这个根的左子树和右子树的二叉树组成的。</p>
+<p>需要注意的是，二叉树并不是树的特殊情况，他们是两个概念。二叉树结点的子树要区分左子树和右子树，即便只有一棵子树也要进行区分，说明他是左子树还是右子树。二树，当结点只有一个孩子时，就<strong>无需区分</strong>它是左还是右的次序。这是二者的主要区别。（也就是说二叉树每个结点位置或者说次序都是固定的，可以是空，但是不可以说它没有的位置，二树的结点位置是相对别的结点来说的，没有别的结点时，他就无所谓左右了）</p>
+
+        <h2 id="树和二叉树的性质"   >
+          <a href="#树和二叉树的性质" class="heading-link"><i class="fas fa-link"></i></a><a href="#树和二叉树的性质" class="headerlink" title="树和二叉树的性质"></a>树和二叉树的性质</h2>
+      
+        <h3 id="抽象数据类型定义"   >
+          <a href="#抽象数据类型定义" class="heading-link"><i class="fas fa-link"></i></a><a href="#抽象数据类型定义" class="headerlink" title="抽象数据类型定义"></a>抽象数据类型定义</h3>
+      <p>二叉树的抽象数据类型定义右非常多的操作，其中初始化和遍历较为重要。其他的当个参考，如下：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">ADT BinaryTree&#123;   </span><br><span class="line">    数据对象D：D是具有相同特性的数据元素的集合  </span><br><span class="line">    数据关系R： </span><br><span class="line">       若D=Φ，则R=Φ，称BinaryTree为空二叉树； </span><br><span class="line">       若D≠Φ，则R=&#123;H&#125;，H是如下二元关系； </span><br><span class="line">     （<span class="number">1</span>）在D中存在惟一的称为根的数据元素root，它在关系H下无前驱； </span><br><span class="line">     （<span class="number">2</span>）若D-&#123;root&#125;≠Φ，则存在D-&#123;root&#125;=&#123;D1,Dr&#125;，且D1∩Dr =Φ； </span><br><span class="line">     （<span class="number">3</span>）若D1≠Φ，则D1中存在惟一的元素x1，&lt;root,x1&gt;∈H，且存在D1上的关系H1 ⊆H；若Dr≠Φ，则Dr中存在惟一的元素xr，&lt;root,xr&gt;∈H，且存在上的关系Hr ⊆H；H=&#123;&lt;root,x1&gt;,&lt;root,xr&gt;,H1,Hr&#125;； </span><br><span class="line">     （4）(D1,&#123;H1&#125;)是一棵符合本定义的二叉树，称为根的左子树；(Dr,&#123;Hr&#125;)是一棵符合本定义的二叉树，称为根的右子树。 </span><br><span class="line"></span><br><span class="line">   基本操作： </span><br><span class="line">   InitBiTree( &amp;T ) </span><br><span class="line">     操作结果：构造空二叉树T。</span><br><span class="line"></span><br><span class="line">   DestroyBiTree( &amp;T ) </span><br><span class="line">     初始条件：二叉树T已存在。 </span><br><span class="line">     操作结果：销毁二叉树T。 </span><br><span class="line"></span><br><span class="line">   CreateBiTree( &amp;T, definition ) </span><br><span class="line">     初始条件：definition给出二叉树T的定义。 </span><br><span class="line">     操作结果：按definiton构造二叉树T。 </span><br><span class="line"></span><br><span class="line">   ClearBiTree( &amp;T ) </span><br><span class="line">     初始条件：二叉树T存在。 </span><br><span class="line">     操作结果：将二叉树T清为空树。 </span><br><span class="line"></span><br><span class="line">   BiTreeEmpty( T ) </span><br><span class="line">     初始条件：二叉树T存在。 </span><br><span class="line">     操作结果：若T为空二叉树，则返回TRUE，否则返回FALSE。 </span><br><span class="line"></span><br><span class="line">   BiTreeDepth( T ) </span><br><span class="line">     初始条件：二叉树T存在。 </span><br><span class="line">     操作结果：返回T的深度。 </span><br><span class="line"></span><br><span class="line">   Root( T ) </span><br><span class="line">     初始条件：二叉树T存在。 </span><br><span class="line">     操作结果：返回T的根。 </span><br><span class="line"></span><br><span class="line">   Value( T, e ) </span><br><span class="line">     初始条件：二叉树T存在，e是T中某个结点。 </span><br><span class="line">     操作结果：返回e的值。 </span><br><span class="line"></span><br><span class="line">   Assign( T, &amp;e, value ) </span><br><span class="line">     初始条件：二叉树T存在，e是T中某个结点。 </span><br><span class="line">     操作结果：结点e赋值为value。 </span><br><span class="line"></span><br><span class="line">   Parent( T, e ) </span><br><span class="line">     初始条件：二叉树T存在，e是T中某个结点。 </span><br><span class="line">     操作结果：若e是T的非根结点，则返回它的双亲，否则返回“空”。 </span><br><span class="line"></span><br><span class="line">   LeftChild( T, e ) </span><br><span class="line">     初始条件：二叉树T存在，e是T中某个结点。 </span><br><span class="line">     操作结果：返回e的左孩子。若e无左孩子，则返回“空”。 </span><br><span class="line"></span><br><span class="line">   RightChild( T, e ) </span><br><span class="line">     初始条件：二叉树T存在，e是T中某个结点。 </span><br><span class="line">     操作结果：返回e的右孩子。若e无右孩子，则返回“空”。 </span><br><span class="line"></span><br><span class="line">   LeftSibling( T, e ) </span><br><span class="line">     初始条件：二叉树T存在，e是T中某个结点。 </span><br><span class="line">     操作结果：返回e的左兄弟。若e是T的左孩子或无左兄弟，则返回“空”。 </span><br><span class="line"></span><br><span class="line">   RightSibling( T, e ) </span><br><span class="line">     初始条件：二叉树T存在，e是T中某个结点。 </span><br><span class="line">     操作结果：返回e的右兄弟。若e是T的右孩子或无右兄弟，则返回“空”。 </span><br><span class="line"></span><br><span class="line">   InsertChild( T, p, LR, c ) </span><br><span class="line">     初始条件：二叉树T存在，p指向T中某个结点，LR为0或1，非空二叉树c与T不相交且右子树为空。 </span><br><span class="line">     操作结果：根据LR为0或1，插入c为T中p所指结点的左或右子树。p所指结点的原有左或右子树则成为c的右子树。 </span><br><span class="line"></span><br><span class="line">   DeleteChild( T, p, LR ) </span><br><span class="line">     初始条件：二叉树T存在，p指向T中某个结点，LR为0或1。 </span><br><span class="line">     操作结果：根据LR为0或1，删除T中p所指结点的左或右子树。 </span><br><span class="line"></span><br><span class="line">   PreOrderTraverse( T, visit() ) </span><br><span class="line">     初始条件：二叉树T存在，Visit是对结点操作的应用函数。 </span><br><span class="line">     操作结果：先序遍历T，对每个结点调用函数Visit一次且仅一次。一旦visit()失败，则操作失败。 </span><br><span class="line"></span><br><span class="line">   InOrderTraverse( T, visit() ) </span><br><span class="line">    初始条件：二叉树T存在，Visit是对结点操作的应用函数。 </span><br><span class="line">     操作结果：中序遍历T，对每个结点调用函数Visit一次且仅一次。一旦visit()失败，则操作失败。 </span><br><span class="line"></span><br><span class="line">   PostOrderTraverse( T, visit() ) </span><br><span class="line">     初始条件：二叉树T存在，Visit是对结点操作的应用函数。 </span><br><span class="line">     操作结果：后序遍历T，对每个结点调用函数Visit一次且仅一次。一旦visit()失败，则操作失败。 </span><br><span class="line"></span><br><span class="line">   LevelOrderTraverse( T, visit() ) </span><br><span class="line">     初始条件：二叉树T存在，Visit是对结点操作的应用函数。 </span><br><span class="line">    操作结果：层次遍历T，对每个结点调用函数Visit一次且仅一次。一旦visit()失败，则操作失败。 </span><br><span class="line"></span><br><span class="line">&#125;ADT BinaryTree</span><br><span class="line"></span><br></pre></td></tr></table></div></figure>
+
+        <h3 id="满二叉树和完全二叉树"   >
+          <a href="#满二叉树和完全二叉树" class="heading-link"><i class="fas fa-link"></i></a><a href="#满二叉树和完全二叉树" class="headerlink" title="满二叉树和完全二叉树"></a>满二叉树和完全二叉树</h3>
+      <p>满二叉树：一棵深度为k且有(2^k)-1个结点的二叉树     [编号规则：<strong>自上而下，自左而右</strong>] </p>
+<pre><code>特点：
+</code></pre>
+<ul>
+<li>每一层上的结点数都是最大结点数，每一节点位置都有元素(每一层都满,2^(i-1)个结点)</li>
+<li>叶子结点全在最底层</li>
+</ul>
+<p><img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e1d513b12a4d425183f920b5a9b8340a~tplv-k3u1fbpfcp-watermark.image" alt="2021-11-17 21-57-59 的屏幕截图.png"></p>
+<p>完全二叉树:深度为k的具有n个结点的二叉树，当且仅当其每一个结点斗鱼深度为k的满二叉树中编号为1~n一一对应时，称之为完全二叉树  </p>
+<p>特点：</p>
+<ul>
+<li>叶子只能分布在层次最大的两层上(倒数第二层与最后一层)</li>
+<li>对任一结点,如果其右子树最大层次为i，则其左子树最大层次必为i或者i+1</li>
+</ul>
+
+        <h3 id="二叉树的性质"   >
+          <a href="#二叉树的性质" class="heading-link"><i class="fas fa-link"></i></a><a href="#二叉树的性质" class="headerlink" title="二叉树的性质"></a>二叉树的性质</h3>
+      <ul>
+<li>在二叉树的第i层至多有2^(i-1)个结点(i &gt;= 1)    [第i层至少1个结点]</li>
+<li>深度为k的结点至多有(2^k)-1个结点    [深度为k的二叉树最多有k个结点]</li>
+<li>对任何一棵二叉树T，如果其叶子树为n0,度为1的结点数为n1，度为2的结点数为n2，则n0 = n2 + 1 [证明略]</li>
+<li>具有n个结点的完全二叉树的深度为$[log(2)n]+1$  ([x]称作x的底，表示不大于x的最大整数)</li>
+<li>如果对一棵有n个结点的完全二叉树（深度为[log(2)n]+1）的结点按层序编号(从第一层到第[log(2)n]+1层，每层从左到右)，则对任一结点i(1&lt;=i&lt;=n)有：<ol>
+<li>如果i=1，则结点i是二叉树的根，无双亲：若i&gt;1，则其双亲是结点[1/2]</li>
+<li>若2i&gt;n，则结点i为叶子结点，无左孩子；否则，其做孩子是2i</li>
+<li>若2i+1&gt;n,则结点i无右孩子；否则，其右孩子是结点2i+1</li>
+</ol>
+</li>
+</ul>
+
+        <h2 id="树和二叉树的实现"   >
+          <a href="#树和二叉树的实现" class="heading-link"><i class="fas fa-link"></i></a><a href="#树和二叉树的实现" class="headerlink" title="树和二叉树的实现"></a>树和二叉树的实现</h2>
+      
+        <h3 id="二叉树的顺序储存"   >
+          <a href="#二叉树的顺序储存" class="heading-link"><i class="fas fa-link"></i></a><a href="#二叉树的顺序储存" class="headerlink" title="二叉树的顺序储存"></a>二叉树的顺序储存</h3>
+      <p>顺序存储用依旧是数组去实现，按满二叉树的结点层次编号，依次放二叉树中的数据元素,结点为空时就置0.</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//二叉树顺序存储</span></span><br><span class="line">#define MAXSIZE <span class="number">100</span></span><br><span class="line">Typedef TelemType SqBoTree[MAXSIZE];</span><br><span class="line">SqBiTree bt;</span><br></pre></td></tr></table></div></figure>
+<p>顺序存储有明显的缺点，当最坏情况下，深度为k的且只有k个结点的单支树需要长度为2^(k-1)的一维数组，几遍不是最坏情况也是很容易浪费空间的。所以顺序储存比较适合满二叉树和完全二叉树。</p>
+
+        <h3 id="二叉树的链式储存"   >
+          <a href="#二叉树的链式储存" class="heading-link"><i class="fas fa-link"></i></a><a href="#二叉树的链式储存" class="headerlink" title="二叉树的链式储存"></a>二叉树的链式储存</h3>
+      <p>二叉树每个结点都可以有两个孩子，所以可以又叫做二叉链表，即两个制作分别指向左右孩子</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">typedef struct BiNode&#123;</span><br><span class="line">    TElemType data;</span><br><span class="line">    struct BiNode *lchild,*rchild;</span><br><span class="line">&#125;BiNode,*BiTree;</span><br></pre></td></tr></table></div></figure>
+<p>但是在我们需要找某个结点双亲的时候，二叉链表就不太方便了，所以我们需要三叉链表:</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">typedef struct TriTNode&#123;</span><br><span class="line">    TElemType data;</span><br><span class="line">    struct TriTNode *lchild,*rchild,*parent;</span><br><span class="line">&#125;TriTNode,*TriTTree;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="遍历二叉树"   >
+          <a href="#遍历二叉树" class="heading-link"><i class="fas fa-link"></i></a><a href="#遍历二叉树" class="headerlink" title="遍历二叉树"></a>遍历二叉树</h2>
+      
+        <h3 id="三种遍历方法"   >
+          <a href="#三种遍历方法" class="heading-link"><i class="fas fa-link"></i></a><a href="#三种遍历方法" class="headerlink" title="三种遍历方法"></a>三种遍历方法</h3>
+      <p>遍历的定义：顺着耨意义奥搜索路径寻访二叉树中的结点，使得每一个结点被访问一次且仅被访问一次（又称周游）</p>
+<blockquote>
+<p>“访问“的含义很广，可以是对结点进行各种处理：输出结点的信息，修改结点的数据等，但要求这种访问不破坏原来的数据结构</p>
+</blockquote>
+<p>遍历的目的：得到树中所以普结点的一个现行排列<br>遍历的用途：他是树结构插入，删除，修改，查找和排序运算的前提，是所有二叉树运算的基础，核心<br> 一共有三种遍历方式（始终先左后右）：</p>
+<ul>
+<li>DLR——先序遍历</li>
+<li>LDR——中序遍历</li>
+<li>LRD——后序遍历</li>
+</ul>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/815763407cce4a16b12893b2969f2ef2~tplv-k3u1fbpfcp-watermark.image" alt="2021-11-19 13-21-38 的屏幕截图.png"><br>自己可以找一棵树是哟下各种遍历方法：</p>
+<p><img src="https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/956b46f31196400aa12ecf6e3082baa7~tplv-k3u1fbpfcp-watermark.image" alt="2021-11-19 13-35-04 的屏幕截图.png"></p>
+
+        <h3 id="由遍历方法确定二叉树"   >
+          <a href="#由遍历方法确定二叉树" class="heading-link"><i class="fas fa-link"></i></a><a href="#由遍历方法确定二叉树" class="headerlink" title="由遍历方法确定二叉树"></a>由遍历方法确定二叉树</h3>
+      <p>若二叉树中各结点的值均不同，则二叉树结点的先序序列，中序序列和后序序列东营市唯一的。所以我们可以通过二茶树的遍历序列确定唯一的一棵二叉树。<br>比如由二叉树的先序序列和中序序列可以确定唯一一棵二叉树，又比如树的后序序列和中序序列可以确定唯一一棵二叉树。（必须需要中序序列做参考）</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://king23.top">不闻钟</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://king23.top/2021/11/18/%E6%A0%91%E5%92%8C%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%B8%80/">https://king23.top/2021/11/18/%E6%A0%91%E5%92%8C%E4%BA%8C%E5%8F%89%E6%A0%91-%E4%B8%80/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://king23.top/tags/Study/">Study</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://king23.top/tags/%E6%A0%91/">树</a></span></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img" src="https://ftp.bmp.ovh/imgs/2021/05/c94b7c01d6e33986.jpg"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img" src="https://ftp.bmp.ovh/imgs/2021/05/cded0174eeb6c085.jpg"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-prev"><a class="paginator-prev__link" href="/2021/11/19/%E5%89%91%E6%8C%87offer06-%E4%BB%8E%E5%B0%BE%E5%88%B0%E5%A4%B4%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/"><span class="paginator-prev__icon"><i class="fas fa-angle-left"></i></span><span class="paginator-prev__text">剑指offer06 从尾到头打印链表</span></a></div><div class="paginator-next"><a class="paginator-next__link" href="/2021/11/18/%E5%89%91%E6%8C%87offer30-%E5%8C%85%E5%90%ABmin%E5%87%BD%E6%95%B0%E7%9A%84%E6%A0%88/"><span class="paginator-prev__text">剑指offer30 包含min函数的栈</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%91%E4%B8%8E%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">
+          树与二叉树的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%91"><span class="toc-number">1.1.</span> <span class="toc-text">
+          树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">1.2.</span> <span class="toc-text">
+          二叉树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%91%E5%92%8C%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="toc-number">2.</span> <span class="toc-text">
+          树和二叉树的性质</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8A%BD%E8%B1%A1%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AE%9A%E4%B9%89"><span class="toc-number">2.1.</span> <span class="toc-text">
+          抽象数据类型定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BB%A1%E4%BA%8C%E5%8F%89%E6%A0%91%E5%92%8C%E5%AE%8C%E5%85%A8%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">2.2.</span> <span class="toc-text">
+          满二叉树和完全二叉树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%80%A7%E8%B4%A8"><span class="toc-number">2.3.</span> <span class="toc-text">
+          二叉树的性质</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%91%E5%92%8C%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">
+          树和二叉树的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%A1%BA%E5%BA%8F%E5%82%A8%E5%AD%98"><span class="toc-number">3.1.</span> <span class="toc-text">
+          二叉树的顺序储存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%93%BE%E5%BC%8F%E5%82%A8%E5%AD%98"><span class="toc-number">3.2.</span> <span class="toc-text">
+          二叉树的链式储存</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%81%8D%E5%8E%86%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">4.</span> <span class="toc-text">
+          遍历二叉树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95"><span class="toc-number">4.1.</span> <span class="toc-text">
+          三种遍历方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%B1%E9%81%8D%E5%8E%86%E6%96%B9%E6%B3%95%E7%A1%AE%E5%AE%9A%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-number">4.2.</span> <span class="toc-text">
+          由遍历方法确定二叉树</span></a></li></ol></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="https://ftp.bmp.ovh/imgs/2021/04/97568392c68eaf01.png" alt="avatar"></div><p class="sidebar-ov-author__text">固执己见 一意孤行</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://www.zhihu.com/" target="_blank" rel="noopener" data-popover="知乎" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">知</span></a><a class="sidebar-ov-social-item" href="tencent://message?nin=2530281837" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="https://juejin.cn/" target="_blank" rel="noopener" data-popover="social.juejin" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">掘</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">65</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">13</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">12</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>不闻钟</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>

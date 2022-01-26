@@ -1,0 +1,352 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="format-detection" content="telephone=no"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"><link rel="icon" href="/images/icons/favicon-16x16.png?v=2.6.2" type="image/png" sizes="16x16"><link rel="icon" href="/images/icons/favicon-32x32.png?v=2.6.2" type="image/png" sizes="32x32"><meta name="description" content="哈夫曼树的基本概念        路径：从树中一个结点到另一个结点之间的分支构成这两个结点的路径结点的路径长度：两结点路径上的分支数树的路径长度(TL)：从树根到每个结点的路径长度之和[结点数目相同的二叉树中，完全二叉树是路径长度最短的二叉树]权(weight):将树中结点赋给一个有着某种含义的数值，则这个数值称为该结点的权结点的带权路径长度：从根结点到该结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="简单了解哈夫曼树">
+<meta property="og:url" content="https://king23.top/2021/12/04/%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91/index.html">
+<meta property="og:site_name" content="Forever King">
+<meta property="og:description" content="哈夫曼树的基本概念        路径：从树中一个结点到另一个结点之间的分支构成这两个结点的路径结点的路径长度：两结点路径上的分支数树的路径长度(TL)：从树根到每个结点的路径长度之和[结点数目相同的二叉树中，完全二叉树是路径长度最短的二叉树]权(weight):将树中结点赋给一个有着某种含义的数值，则这个数值称为该结点的权结点的带权路径长度：从根结点到该结">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-12-04T08:06:21.000Z">
+<meta property="article:modified_time" content="2021-12-04T08:06:52.000Z">
+<meta property="article:author" content="不闻钟">
+<meta property="article:tag" content="Study">
+<meta property="article:tag" content="树">
+<meta name="twitter:card" content="summary"><title>简单了解哈夫曼树 | Forever King</title><link ref="canonical" href="https://king23.top/2021/12/04/%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91/"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.12.1/css/all.min.css" type="text/css"><link rel="stylesheet" href="/css/index.css?v=2.6.2"><script>var Stun = window.Stun || {};
+var CONFIG = {
+  root: '/',
+  algolia: undefined,
+  assistSearch: undefined,
+  fontIcon: {"prompt":{"success":"fas fa-check-circle","info":"fas fa-arrow-circle-right","warning":"fas fa-exclamation-circle","error":"fas fa-times-circle"},"copyBtn":"fas fa-copy"},
+  sidebar: {"offsetTop":"20px","tocMaxDepth":6},
+  header: {"enable":true,"showOnPost":true,"scrollDownIcon":false},
+  postWidget: {"endText":true},
+  nightMode: {"enable":true},
+  back2top: {"enable":true},
+  codeblock: {"style":"default","highlight":"light","wordWrap":false},
+  reward: true,
+  fancybox: false,
+  zoomImage: {"gapAside":"20px"},
+  galleryWaterfall: undefined,
+  lazyload: false,
+  pjax: undefined,
+  externalLink: {"icon":{"enable":true,"name":"fas fa-external-link-alt"}},
+  shortcuts: undefined,
+  prompt: {"copyButton":"复制","copySuccess":"复制成功","copyError":"复制失败"},
+  sourcePath: {"js":"js","css":"css","images":"images"},
+};
+
+window.CONFIG = CONFIG;</script><meta name="generator" content="Hexo 5.4.0"></head><body><div class="container" id="container"><header class="header" id="header"><div class="header-inner"><nav class="header-nav header-nav--fixed"><div class="header-nav-inner"><div class="header-nav-menubtn"><i class="fas fa-bars"></i></div><div class="header-nav-menu"><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/"><span class="header-nav-menu-item__icon"><i class="fas fa-home"></i></span><span class="header-nav-menu-item__text">首页</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/archives/"><span class="header-nav-menu-item__icon"><i class="fas fa-folder-open"></i></span><span class="header-nav-menu-item__text">归档</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/categories/"><span class="header-nav-menu-item__icon"><i class="fas fa-layer-group"></i></span><span class="header-nav-menu-item__text">分类</span></a></div><div class="header-nav-menu-item"><a class="header-nav-menu-item__link" href="/tags/"><span class="header-nav-menu-item__icon"><i class="fas fa-tags"></i></span><span class="header-nav-menu-item__text">标签</span></a></div></div><div class="header-nav-search"><span class="header-nav-search__icon"><i class="fas fa-search"></i></span><span class="header-nav-search__text">搜索</span></div><div class="header-nav-mode"><div class="mode"><div class="mode-track"><span class="mode-track-moon"></span><span class="mode-track-sun"></span></div><div class="mode-thumb"></div></div></div></div></nav><div class="header-banner"><div class="header-banner-info"><div class="header-banner-info__title">Forever King</div><div class="header-banner-info__subtitle">Live a good life meet slowly.</div></div></div></div></header><main class="main" id="main"><div class="main-inner"><div class="content-wrap" id="content-wrap"><div class="content" id="content"><!-- Just used to judge whether it is an article page--><div id="is-post"></div><div class="post"><header class="post-header"><h1 class="post-title">简单了解哈夫曼树</h1><div class="post-meta"><span class="post-meta-item post-meta-item--createtime"><span class="post-meta-item__icon"><i class="far fa-calendar-plus"></i></span><span class="post-meta-item__info">发表于</span><span class="post-meta-item__value">2021-12-04</span></span><span class="post-meta-item post-meta-item--updatetime"><span class="post-meta-item__icon"><i class="far fa-calendar-check"></i></span><span class="post-meta-item__info">更新于</span><span class="post-meta-item__value">2021-12-04</span></span><span class="post-meta-item post-meta-item--visitors"><span class="post-meta-item__icon"><i class="fas fa-eye"></i></span><span class="post-meta-item__info">阅读次数</span><span class="post-meta-item__value" id="busuanzi_value_page_pv"></span></span></div></header><div class="post-body">
+        <h2 id="哈夫曼树的基本概念"   >
+          <a href="#哈夫曼树的基本概念" class="heading-link"><i class="fas fa-link"></i></a><a href="#哈夫曼树的基本概念" class="headerlink" title="哈夫曼树的基本概念"></a>哈夫曼树的基本概念</h2>
+      <blockquote>
+<p>路径：从树中一个结点到另一个结点之间的分支构成这两个结点的路径<br>结点的路径长度：两结点路径上的分支数<br>树的路径长度(TL)：从树根到每个结点的路径长度之和[结点数目相同的二叉树中，完全二叉树是路径长度最短的二叉树]<br>权(weight):将树中结点赋给一个有着某种含义的数值，则这个数值称为该结点的权<br>结点的带权路径长度：从根结点到该结点的路径长度与该结点的权的乘积<br>树的带权路径长度(WPL)：树中所有叶子结点的带权路径长度之和</p>
+</blockquote>
+<p>哈夫曼树也叫最优二叉树（带权路径长度最短的<strong>树</strong>[<em>二叉树</em>]）</p>
+
+        <h2 id="哈夫曼树的构造算法"   >
+          <a href="#哈夫曼树的构造算法" class="heading-link"><i class="fas fa-link"></i></a><a href="#哈夫曼树的构造算法" class="headerlink" title="哈夫曼树的构造算法"></a>哈夫曼树的构造算法</h2>
+      <p> 哈夫曼树中权越大的叶子离根越近，用贪心算法，首先选择权值小的作叶子结点<br> 编写了哈夫曼口诀来帮助记忆：1.构造森林全是根 2.选用量小造新树 3.删除量小小新人 4.重复2，3剩单根  </p>
+<ol>
+<li> 根据n个给定的权值{w1,w2,w3…wn}构成n棵二叉树的森林F={T1，T2…Tn}，其中Ti只有一个带权为Wi的根节点</li>
+<li> 在F中选取两棵根结点的权值最小的树作为左右子树，构造一棵新的二叉树，且设置新的二叉树的根节点的权值为其左右子树上根结点的权值指和</li>
+<li> 在F中删除这两棵树，同时将新得到的二叉树加入森林中</li>
+<li>重复(2)(3)，知道森林中只有一棵树为止，这棵树即为哈夫曼树<blockquote>
+<p>构造哈夫曼树中需要注意：</p>
+<ul>
+<li> 在哈夫曼树中，初始有n棵二叉树，要经过n-1次合并最终形成二叉树</li>
+<li> 经过n-1次合并产生n-1个新结点，且这n-1个新阶段都是具有两个孩子的分支结点</li>
+<li>哈夫曼树共有2n-1个结点，且所有分支结点的度均不为1</li>
+</ul>
+</blockquote>
+
+        <h2 id="构造算法的实现"   >
+          <a href="#构造算法的实现" class="heading-link"><i class="fas fa-link"></i></a><a href="#构造算法的实现" class="headerlink" title="构造算法的实现"></a>构造算法的实现</h2>
+      采用顺序存储结构——一维结构数组<br>结点类型定义：<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">typedef struct &#123;</span><br><span class="line">    int weight;</span><br><span class="line">    int parent, lch, rch;</span><br><span class="line">&#125;HTNode,*HuffmanTree;</span><br></pre></td></tr></table></div></figure>
+算法实现：<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="function"><span class="title">CreatHuffmanTree</span>(<span class="params">HuffmanTree HT,int n</span>)</span>&#123;</span><br><span class="line">    <span class="comment">//初始化</span></span><br><span class="line">    <span class="keyword">if</span>(n &lt;= <span class="number">1</span>) <span class="keyword">return</span>;</span><br><span class="line">    int m = <span class="number">2</span> * n - <span class="number">1</span>;</span><br><span class="line">    HT = <span class="keyword">new</span> HTNode[m + <span class="number">1</span>];<span class="comment">//0号元素未用，HT[m]表示根结点</span></span><br><span class="line">    <span class="keyword">for</span>(int i = <span class="number">1</span>; i &lt;= m; i++)&#123;</span><br><span class="line">        HT[i].lch = <span class="number">0</span>;HT[i].rch = <span class="number">0</span>;HT[i].parent = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(int i = <span class="number">1</span>; i &lt;= n; i++) cin &gt;&gt; HT[i].weight;<span class="comment">//输入weigth值</span></span><br><span class="line">    <span class="comment">//初始化结束，开始构建</span></span><br><span class="line">    <span class="keyword">for</span>(int i = n + <span class="number">1</span>; i &lt;= m; i++)&#123;<span class="comment">//合并产生n-1个结点</span></span><br><span class="line">        int s1,s2;</span><br><span class="line">        Select(HT,i - <span class="number">1</span>,s1,s2);</span><br><span class="line">        <span class="comment">//在HT[k](1&lt;= k &lt;= i - 1)中选择两个其双亲与为0，且权值最小的结点，并返回他们在HT中的序号</span></span><br><span class="line">        HT[i].lch = s1,HT[i].rch = s2;</span><br><span class="line">        HT[i].weigth = HT[s1].weigth + HT[s2].weigth;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+上述的查找两个最小值算法Select：</li>
+</ol>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="function"><span class="title">Select</span>(<span class="params">HuffmanTree HT, int end, int *s1, int *s2</span>)</span>&#123;</span><br><span class="line">    int min1, min2;</span><br><span class="line">    <span class="comment">//遍历数组初始下标为 1</span></span><br><span class="line">    int i = <span class="number">1</span>;</span><br><span class="line">    <span class="comment">//找到还没构建树的结点</span></span><br><span class="line">    <span class="keyword">while</span> (HT[i].parent != <span class="number">0</span> &amp;&amp; i &lt;= end) &#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    min1 = HT[i].weight;</span><br><span class="line">    *s1 = i;</span><br><span class="line"></span><br><span class="line">    i++;</span><br><span class="line">    <span class="keyword">while</span> (HT[i].parent != <span class="number">0</span> &amp;&amp; i &lt;= end) &#123;</span><br><span class="line">        i++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//对找到的两个结点比较大小，min2为大的，min1为小的</span></span><br><span class="line">    <span class="keyword">if</span> (HT[i].weight &lt; min1) &#123;</span><br><span class="line">        min2 = min1;</span><br><span class="line">        *s2 = *s1;</span><br><span class="line">        min1 = HT[i].weight;</span><br><span class="line">        *s1 = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        min2 = HT[i].weight;</span><br><span class="line">        *s2 = i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//两个结点和后续的所有未构建成树的结点做比较</span></span><br><span class="line">    <span class="keyword">for</span> (int j = i + <span class="number">1</span>; j &lt;= end; j++) &#123;</span><br><span class="line">        <span class="comment">//如果有父结点，直接跳过，进行下一个</span></span><br><span class="line">        <span class="keyword">if</span> (HT[j].parent != <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果比最小的还小，将min2=min1，min1赋值新的结点的下标</span></span><br><span class="line">        <span class="keyword">if</span> (HT[j].weight &lt; min1) &#123;</span><br><span class="line">            min2 = min1;</span><br><span class="line">            min1 = HT[j].weight;</span><br><span class="line">            *s2 = *s1;</span><br><span class="line">            *s1 = j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果介于两者之间，min2赋值为新的结点的位置下标</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (HT[j].weight &gt;= min1 &amp;&amp; HT[j].weight &lt; min2) &#123;</span><br><span class="line">            min2 = HT[j].weight;</span><br><span class="line">            *s2 = j;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+
+        <h2 id="哈夫曼编码"   >
+          <a href="#哈夫曼编码" class="heading-link"><i class="fas fa-link"></i></a><a href="#哈夫曼编码" class="headerlink" title="哈夫曼编码"></a>哈夫曼编码</h2>
+      <p> 哈夫曼编码是可变字长编码(VLC)的一种。该方法完全依据字符出现概率来构造异字头的平均长度最短的码字，有时称之为最佳编码，一般就叫做Huffman编码，在计算机中，霍夫曼编码使用变长编码表对源符号（如文件中的一个字母）进行编码，其中变长编码表是通过一种评估来源符号出现机率的方法得到的，出现机率高的字母使用较短的编码，反之出现机率低的则使用较长的编码，这便使编码之后的字符串的平均长度、<span class="exturl"><a class="exturl__link"   href="https://link.zhihu.com/?target=http://zh.wikipedia.org/wiki/%25E6%259C%259F%25E6%259C%259B%25E5%2580%25BC%2522%2520%255Co%2520%2522%25E6%259C%259F%25E6%259C%259B%25E5%2580%25BC" >期望值</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>降低，从而达到<span class="exturl"><a class="exturl__link"   href="https://link.zhihu.com/?target=http://zh.wikipedia.org/wiki/%25E6%2597%25A0%25E6%258D%259F%25E5%258E%258B%25E7%25BC%25A9%2522%2520%255Co%2520%2522%25E6%2597%25A0%25E6%258D%259F%25E5%258E%258B%25E7%25BC%25A9" >无损压缩</a><span class="exturl__icon"><i class="fas fa-external-link-alt"></i></span></span>数据的目的。 </p>
+<p> 我们要从哈夫曼树中构建哈夫曼编码,可以从叶子结点往根结点遍历，这样比较方便：</p>
+<figure class="highlight js"><div class="table-container"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> <span class="function"><span class="title">CreatHuffmanCode</span>(<span class="params">HuffmanTree HT,HuffmanCode &amp;HC,int n</span>)</span>&#123;</span><br><span class="line">    <span class="comment">/*从叶子结点开始向上回溯求每个字符的哈夫曼编码，存储在编码表HC中*/</span></span><br><span class="line">    HC = <span class="keyword">new</span> char *[n + <span class="number">1</span>];<span class="comment">//分配n个字符串编码的头指针矢量</span></span><br><span class="line">    cd = <span class="keyword">new</span> char[n];<span class="comment">//分配临时存放编码的动态数组空间</span></span><br><span class="line">    <span class="comment">//*HC = (HuffmanCode) malloc((n+1) * sizeof(char *));</span></span><br><span class="line">    <span class="comment">//char *cd = (char *)malloc(n*sizeof(char)); //存放结点哈夫曼编码的字符[串]数组</span></span><br><span class="line">    cd[n - <span class="number">1</span>] = <span class="string">&#x27;\0&#x27;</span>;<span class="comment">//结束符</span></span><br><span class="line">    <span class="keyword">for</span>(int i = <span class="number">0</span>; i &lt;= n; i++)&#123;</span><br><span class="line">        int start = n - <span class="number">1</span> , c = i , f = HT[i].parent;<span class="comment">//start:从叶子结点出发，得到的哈夫曼编码是逆序的，需要在字符串数组中逆序存放，c:当前结点在数组中的位置</span></span><br><span class="line">        <span class="keyword">while</span>(f != <span class="number">0</span>)&#123;<span class="comment">//从叶子结点向上回溯，直到根结点</span></span><br><span class="line">            start--;</span><br><span class="line">            <span class="keyword">if</span>(HT[f].lch == c) cd[start] = ‘<span class="number">0</span>’；</span><br><span class="line">            <span class="keyword">else</span> cd[start] = <span class="string">&#x27;1&#x27;</span>;</span><br><span class="line">            c = f;</span><br><span class="line">            f = HT[f].parent;</span><br><span class="line">        &#125;</span><br><span class="line">        HC[i] = <span class="keyword">new</span> char[n - start];为第i个字符编码分配空间</span><br><span class="line">        <span class="comment">//(*HC)[i] = (char *)malloc((n-start)*sizeof(char));</span></span><br><span class="line">        strcpy(HC[i],&amp;cd[start]);</span><br><span class="line">    ]</span><br><span class="line">    <span class="keyword">delete</span> cd;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></div></figure>
+<p>当然你也可以从根结点往叶子结点找，这样比较麻烦，不推荐这样做。</p>
+</div><footer class="post-footer"><div class="post-ending ending"><div class="ending__text">------ 本文结束，感谢您的阅读 ------</div></div><div class="post-copyright copyright"><div class="copyright-author"><span class="copyright-author__name">本文作者: </span><span class="copyright-author__value"><a href="https://king23.top">不闻钟</a></span></div><div class="copyright-link"><span class="copyright-link__name">本文链接: </span><span class="copyright-link__value"><a href="https://king23.top/2021/12/04/%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91/">https://king23.top/2021/12/04/%E7%AE%80%E5%8D%95%E4%BA%86%E8%A7%A3%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91/</a></span></div><div class="copyright-notice"><span class="copyright-notice__name">版权声明: </span><span class="copyright-notice__value">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" rel="external nofollow" target="_blank">BY-NC-SA</a> 许可协议。转载请注明出处！</span></div></div><div class="post-tags"><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://king23.top/tags/Study/">Study</a></span><span class="post-tags-item"><span class="post-tags-item__icon"><i class="fas fa-tag"></i></span><a class="post-tags-item__link" href="https://king23.top/tags/%E6%A0%91/">树</a></span></div><div class="post-reward reward"><div class="reward-button">请我喝杯咖啡~</div><div class="reward-qrcode"><span class="reward-qrcode-alipay"><img class="reward-qrcode-alipay__img" src="https://ftp.bmp.ovh/imgs/2021/05/c94b7c01d6e33986.jpg"><div class="reward-qrcode-alipay__text">支付宝打赏</div></span><span class="reward-qrcode-wechat"><img class="reward-qrcode-wechat__img" src="https://ftp.bmp.ovh/imgs/2021/05/cded0174eeb6c085.jpg"><div class="reward-qrcode-wechat__text">微信打赏</div></span></div></div><nav class="post-paginator paginator"><div class="paginator-next"><a class="paginator-next__link" href="/2021/11/30/%E5%89%91%E6%8C%87offer20-%E8%A1%A8%E7%A4%BA%E6%95%B0%E5%80%BC%E7%9A%84%E5%AD%97%E7%AC%A6%E4%B8%B2/"><span class="paginator-prev__text">剑指offer20 表示数值的字符串</span><span class="paginator-next__icon"><i class="fas fa-angle-right"></i></span></a></div></nav></footer></div></div></div><div class="sidebar-wrap" id="sidebar-wrap"><aside class="sidebar" id="sidebar"><div class="sidebar-nav"><span class="sidebar-nav-toc current">文章目录</span><span class="sidebar-nav-ov">站点概览</span></div><section class="sidebar-toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.</span> <span class="toc-text">
+          哈夫曼树的基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%88%E5%A4%AB%E6%9B%BC%E6%A0%91%E7%9A%84%E6%9E%84%E9%80%A0%E7%AE%97%E6%B3%95"><span class="toc-number">2.</span> <span class="toc-text">
+          哈夫曼树的构造算法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">3.</span> <span class="toc-text">
+          构造算法的实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%88%E5%A4%AB%E6%9B%BC%E7%BC%96%E7%A0%81"><span class="toc-number">4.</span> <span class="toc-text">
+          哈夫曼编码</span></a></li></ol></section><!-- ov = overview--><section class="sidebar-ov hide"><div class="sidebar-ov-author"><div class="sidebar-ov-author__avatar"><img class="sidebar-ov-author__avatar_img" src="https://ftp.bmp.ovh/imgs/2021/04/97568392c68eaf01.png" alt="avatar"></div><p class="sidebar-ov-author__text">固执己见 一意孤行</p></div><div class="sidebar-ov-social"><a class="sidebar-ov-social-item" href="https://github.com/" target="_blank" rel="noopener" data-popover="Github" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-github"></i></span></a><a class="sidebar-ov-social-item" href="https://www.zhihu.com/" target="_blank" rel="noopener" data-popover="知乎" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">知</span></a><a class="sidebar-ov-social-item" href="tencent://message?nin=2530281837" target="_blank" rel="noopener" data-popover="QQ" data-popover-pos="up"><span class="sidebar-ov-social-item__icon"><i class="fab fa-qq"></i></span></a><a class="sidebar-ov-social-item" href="https://juejin.cn/" target="_blank" rel="noopener" data-popover="social.juejin" data-popover-pos="up"><span class="sidebar-ov-social-item__icon">掘</span></a></div><div class="sidebar-ov-state"><a class="sidebar-ov-state-item sidebar-ov-state-item--posts" href="/archives/"><div class="sidebar-ov-state-item__count">65</div><div class="sidebar-ov-state-item__name">归档</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--categories" href="/categories/"><div class="sidebar-ov-state-item__count">13</div><div class="sidebar-ov-state-item__name">分类</div></a><a class="sidebar-ov-state-item sidebar-ov-state-item--tags" href="/tags/"><div class="sidebar-ov-state-item__count">12</div><div class="sidebar-ov-state-item__name">标签</div></a></div><div class="sidebar-ov-cc"><a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en" target="_blank" rel="noopener" data-popover="知识共享许可协议" data-popover-pos="up"><img src="/images/cc-by-nc-sa.svg"></a></div></section><div class="sidebar-reading"><div class="sidebar-reading-info"><span class="sidebar-reading-info__text">你已阅读了 </span><span class="sidebar-reading-info__num">0</span><span class="sidebar-reading-info__perc">%</span></div><div class="sidebar-reading-line"></div></div></aside></div><div class="clearfix"></div></div></main><footer class="footer" id="footer"><div class="footer-inner"><div><span>Copyright © 2022</span><span class="footer__icon"><i class="fas fa-heart"></i></span><span>不闻钟</span></div><div><span>由 <a href="http://hexo.io/" title="Hexo" target="_blank" rel="noopener">Hexo</a> 强力驱动</span><span> v5.4.0</span><span class="footer__devider">|</span><span>主题 - <a href="https://github.com/liuyib/hexo-theme-stun/" title="Stun" target="_blank" rel="noopener">Stun</a></span><span> v2.6.2</span></div><div class="busuanzi"><span class="busuanzi-siteuv"><span class="busuanzi-siteuv__icon"><i class="fas fa-user"></i></span><span class="busuanzi-siteuv__info">访问人数</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_uv"></span></span><span class="busuanzi-sitepv"><span class="busuanzi-siteuv__icon"><i class="fas fa-eye"></i></span><span class="busuanzi-siteuv__info">浏览总量</span><span class="busuanzi-siteuv__value" id="busuanzi_value_site_pv"></span></span></div></div></footer><div class="loading-bar" id="loading-bar"><div class="loading-bar__progress"></div></div><div class="back2top" id="back2top"><span class="back2top__icon"><i class="fas fa-rocket"></i></span></div></div><div class="search-mask"></div><div class="search-popup"><span class="search-close"></span><div class="search-input"><input placeholder="搜索文章（支持多关键词，请用空格分隔）"></div><div class="search-results"></div></div><script src="https://cdn.jsdelivr.net/npm/jquery@v3.4.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script><script>function initSearch() {
+  var isXML = true;
+  var search_path = 'search.xml';
+
+  if (!search_path) {
+    search_path = 'search.xml';
+  } else if (/json$/i.test(search_path)) {
+    isXML = false;
+  }
+
+  var path = '/' + search_path;
+  $.ajax({
+    url: path,
+    dataType: isXML ? 'xml' : 'json',
+    async: true,
+    success: function (res) {
+      var datas = isXML ? $('entry', res).map(function () {
+        // 将 XML 转为 JSON
+        return {
+          title: $('title', this).text(),
+          content: $('content', this).text(),
+          url: $('url', this).text()
+        };
+      }).get() : res;
+      var $input = $('.search-input input');
+      var $result = $('.search-results');
+      // 搜索对象（标题、内容）的权重，影响显示顺序
+      var WEIGHT = { title: 100, content: 1 };
+      var searchPost = function () {
+        var searchText = $input.val().toLowerCase().trim();
+        // 根据空白字符分隔关键字
+        var keywords = searchText.split(/[\s]+/);
+        // 搜索结果
+        var matchPosts = [];
+
+        // 有多个关键字时，将原文字整个保存下来
+        if (keywords.length > 1) {
+          keywords.push(searchText);
+        }
+        // 防止未输入字符时搜索
+        if (searchText.length > 0) {
+          datas.forEach(function (data) {
+            var isMatch  = false;
+            // 没有标题的文章使用预设的 i18n 变量代替
+            var title = (data.title && data.title.trim()) || '[ 文章无标题 ]';
+            var titleLower = title && title.toLowerCase();
+            // 删除 HTML 标签 和 所有空白字符
+            var content = data.content && data.content.replace(/<[^>]+>/g, '');
+            var contentLower = content && content.toLowerCase();
+            // 删除重复的 /
+            var postURL = data.url && decodeURI(data.url).replace(/\/{2,}/g, '/');
+            // 标题中匹配到的关键词
+            var titleHitSlice = [];
+            // 内容中匹配到的关键词
+            var contentHitSlice = [];
+
+            keywords.forEach(function (keyword) {
+              /**
+              * 获取匹配的关键词的索引
+              * @param {String} keyword 要匹配的关键字
+              * @param {String} text 原文字
+              * @param {Boolean} caseSensitive 是否区分大小写
+              * @param {Number} weight 匹配对象的权重。权重大的优先显示
+              * @return {Array}
+              */
+              function getIndexByword (word, text, caseSensitive, weight) {
+                if (!word || !text) {
+                  return [];
+                };
+
+                var startIndex = 0; // 每次匹配的开始索引
+                var index = -1;     // 匹配到的索引值
+                var result = [];    // 匹配结果
+
+                if (!caseSensitive) {
+                  word = word.toLowerCase();
+                  text = text.toLowerCase();
+                }
+
+                while((index = text.indexOf(word, startIndex)) !== -1) {
+                  var hasMatch = false;
+                  // 索引位置相同的关键词，保留长度较长的
+                  titleHitSlice.forEach(function (hit) {
+                    if (hit.index === index && hit.word.length < word.length) {
+                      hit.word = word;
+                      hasMatch = true;
+                    }
+                  });
+                  startIndex = index + word.length;
+                  !hasMatch && result.push({ index: index, word: word, weight: weight });
+                }
+                return result;
+              }
+              titleHitSlice = titleHitSlice.concat(getIndexByword(keyword, titleLower, false, WEIGHT.title));
+              contentHitSlice = contentHitSlice.concat(getIndexByword(keyword, contentLower, false, WEIGHT.content));
+            });
+
+            var hitTitle = titleHitSlice.length;
+            var hitContent = contentHitSlice.length;
+
+            if (hitTitle > 0 || hitContent > 0) {
+              isMatch = true;
+            }
+            if (isMatch) {
+              ;[titleHitSlice, contentHitSlice].forEach(function (hit) {
+                // 按照匹配文字的索引的递增顺序排序
+                hit.sort(function (left, right) {
+                  return left.index - right.index;
+                });
+              });
+              /**
+              * 给文本中匹配到的关键词添加标记，从而进行高亮显示
+              * @param {String} text 原文本
+              * @param {Array} hitSlice 匹配项的索引信息
+              * @param {Number} start 开始索引
+              * @param {Number} end 结束索引
+              * @return {String}
+              */
+              function highlightKeyword (text, hitSlice, start, end) {
+                if (!text || !hitSlice || !hitSlice.length) {
+                  return;
+                }
+
+                var result = '';
+                var startIndex = start;
+                var endIndex = end;
+                hitSlice.forEach(function (hit) {
+                  if (hit.index < startIndex) {
+                    return;
+                  }
+
+                  var hitWordEnd = hit.index + hit.word.length;
+                  result += text.slice(startIndex, hit.index);
+                  result += '<b>' + text.slice(hit.index, hitWordEnd) + '</b>';
+                  startIndex = hitWordEnd;
+                });
+                result += text.slice(startIndex, endIndex);
+                return result;
+              }
+
+              var postData = {};
+              // 文章总的搜索权重
+              var postWeight = titleHitSlice.length * WEIGHT.title + contentHitSlice.length * WEIGHT.content;
+              // 标记匹配关键词后的标题
+              var postTitle = highlightKeyword(title, titleHitSlice, 0, title.length) || title;
+              // 标记匹配关键词后的内容
+              var postContent;
+              // 显示内容的长度
+              var SHOW_WORD_LENGTH = 200;
+              // 命中关键词前的字符显示长度
+              var SHOW_WORD_FRONT_LENGTH = 20;
+              var SHOW_WORD_END_LENGTH = SHOW_WORD_LENGTH - SHOW_WORD_FRONT_LENGTH;
+
+              // 截取匹配的第一个字符，前后共 200 个字符来显示
+              if (contentHitSlice.length > 0) {
+                var firstIndex = contentHitSlice[0].index;
+                var start = firstIndex > SHOW_WORD_FRONT_LENGTH ? firstIndex - SHOW_WORD_FRONT_LENGTH : 0;
+                var end = firstIndex + SHOW_WORD_END_LENGTH;
+                postContent = highlightKeyword(content, contentHitSlice, start, end);
+              } else { // 未匹配到内容，直接截取前 200 个字符来显示
+                postContent = content.slice(0, SHOW_WORD_LENGTH);
+              }
+              postData.title = postTitle;
+              postData.content = postContent;
+              postData.url = postURL;
+              postData.weight = postWeight;
+              matchPosts.push(postData);
+            }
+          });
+        }
+
+        var resultInnerHtml = '';
+        if (matchPosts.length) {
+          // 按权重递增的顺序排序，使权重大的优先显示
+          matchPosts.sort(function (left, right) {
+            return right.weight - left.weight;
+          });
+          resultInnerHtml += '<ul>';
+          matchPosts.forEach(function (post) {
+            resultInnerHtml += '<li><a class="search-results-title" href="' + post.url + '">';
+            resultInnerHtml += post.title;
+            resultInnerHtml += '</a><div class="search-results-content">';
+            resultInnerHtml += post.content;
+            resultInnerHtml += '</div></li>';
+          });
+          resultInnerHtml += '</ul>';
+        } else {
+          resultInnerHtml += '<div class="search-results-none"><i class="far fa-meh"></i></div>';
+        }
+        $result.html(resultInnerHtml);
+      };
+      $input.on('input', searchPost);
+      $input.on('keyup', function (e) {
+        if (e.keyCode === Stun.utils.codeToKeyCode('Enter')) {
+          searchPost();
+        }
+      });
+    }
+  });
+}
+
+function closeSearch () {
+  $('body').css({ overflow: 'auto' });
+  $('.search-popup').css({ display: 'none' });
+  $('.search-mask').css({ display: 'none' });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  Stun.utils.pjaxReloadLocalSearch = function () {
+    $('.header-nav-search').on('click', function (e) {
+      e.stopPropagation();
+      $('body').css('overflow', 'hidden');
+      $('.search-popup')
+        .velocity('stop')
+        .velocity('transition.expandIn', {
+          duration: 300,
+          complete: function () {
+            $('.search-popup input').focus();
+          }
+        });
+      $('.search-mask')
+        .velocity('stop')
+        .velocity('transition.fadeIn', {
+          duration: 300
+        });
+
+      initSearch();
+    });
+    $('.search-mask, .search-close').on('click', function () {
+      closeSearch();
+    });
+    $(document).on('keydown', function (e) {
+      // Escape <=> 27
+      if (e.keyCode === Stun.utils.codeToKeyCode('Escape')) {
+        closeSearch();
+      }
+    });
+  };
+
+  Stun.utils.pjaxReloadLocalSearch();
+}, false);
+
+function safeOpenUrl(url) {
+  var newTab = window.open();
+  newTab.opener = null;
+  newTab.location = url;
+}
+
+function extSearch(engine) {
+  var engines = {
+    google: 'https://www.google.com/search?q=',
+    bing: 'https://cn.bing.com/search?q=',
+    baidu: 'https://www.baidu.com/s?ie=UTF-8&wd=',
+  };
+  var host = window.location.host;
+  var query = $('.search-input input').val().toLowerCase().trim();
+  var uri = engines[engine] + query + ' site:' + host;
+
+  if (query) {
+    safeOpenUrl(uri);
+  } else {
+    Stun.utils.popAlert('warning', '请输入字符');
+  }
+}
+
+var assistSearchList = window.CONFIG.assistSearch;
+
+if (Array.isArray(assistSearchList)) {
+  assistSearchList.forEach(function (name) {
+    document.querySelector('.search-btns-item--' + name).addEventListener('click', function () {
+      extSearch(name);
+    }, false);
+  });
+}</script><script src="https://cdn.jsdelivr.net/gh/sukkaw/busuanzi@latest/bsz.pure.mini.js" async></script><script src="/js/utils.js?v=2.6.2"></script><script src="/js/stun-boot.js?v=2.6.2"></script><script src="/js/scroll.js?v=2.6.2"></script><script src="/js/header.js?v=2.6.2"></script><script src="/js/sidebar.js?v=2.6.2"></script><script type="application/json" src="/search.xml"></script></body></html>
